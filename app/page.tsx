@@ -13,16 +13,11 @@ export default function PlaidLink() {
                 method: "POST",
             });
             const data = await response.json();
-            console.log("Fetched link token:", data);
             setToken(data.link_token);
         };
 
         createLinkToken();
     }, []);
-
-    useEffect(() => {
-        console.log("Link token:", token);
-    }, [token]);
 
     const onSuccess = useCallback(async (publicToken: string) => {
         await fetch("/api/exchange-public-token", {
@@ -35,7 +30,7 @@ export default function PlaidLink() {
         Router.push("/dash");
     }, []);
 
-    const { open, ready, error } = usePlaidLink({
+    const { open, ready } = usePlaidLink({
         token: token!,
         onSuccess,
     });
