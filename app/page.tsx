@@ -1,10 +1,11 @@
 "use client";
 
-import Router from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { usePlaidLink } from "react-plaid-link";
 
 export default function PlaidLink() {
+    const router = useRouter();
     const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
@@ -19,7 +20,7 @@ export default function PlaidLink() {
         createLinkToken();
     }, []);
 
-    const onSuccess = useCallback(async (publicToken: string) => {
+    const onSuccess = async (publicToken: string) => {
         await fetch("/api/exchange-public-token", {
             method: "POST",
             headers: {
@@ -27,8 +28,8 @@ export default function PlaidLink() {
             },
             body: JSON.stringify({ publicToken }),
         });
-        Router.push("/dash");
-    }, []);
+        router.push("/dashboard");
+    };
 
     const { open, ready } = usePlaidLink({
         token: token!,
