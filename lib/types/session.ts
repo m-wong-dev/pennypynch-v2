@@ -1,3 +1,3 @@
 export interface Session {
-    accessToken?: string;
+    accessTokens?: string[];
 }

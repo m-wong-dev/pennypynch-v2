@@ -10,15 +10,20 @@ export default async function Dashboard() {
         sessionOptions
     );
 
-    const access_token = session.accessToken;
+    const access_tokens = session.accessTokens;
 
-    if (!access_token) {
+    if (!access_tokens || access_tokens.length === 0) {
         redirect("/");
     }
 
-    const response = await plaidClient.accountsBalanceGet({ access_token });
-
-    console.log(response.data);
+    Promise.all(
+        access_tokens.map(async (access_token) => {
+            const response = await plaidClient.accountsGet({
+                access_token,
+            });
+            console.log(response.data);
+        })
+    );
 
     return <h1>Dashboard</h1>;
 }
